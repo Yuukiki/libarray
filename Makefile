@@ -12,8 +12,10 @@ static-lib:
 dynamic-lib:
 	$(CC) -shared -fPIC -o $(LIBNAME).so $(SRC) -Iinclude
 
+test: static-lib
+	$(CC) -o test main.c -Iinclude -L. -larray
 
 .PHONY: clean
 
 clean:
-	@rm -f $(OBJ) $(LIBNAME).a $(LIBNAME).so
+	@rm -f $(OBJ) $(LIBNAME).a $(LIBNAME).so test

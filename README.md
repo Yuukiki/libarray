@@ -1,2 +1,2 @@
 # libarray
-A easy universal container wirtten in C.
+An easy universal container wirtten in C.
