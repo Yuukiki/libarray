@@ -565,6 +565,7 @@ __LIBARRAY_PRIVATE int ArrayListSet(ArrayList *plist,uint32_t pos,...)
     return -1;
   }
   uint32_t len = ArrayListGetLength(plist);
+  uint8_t type = ArrayListGetType(plist);
   if (pos >= len) {
     return -1;
   }
@@ -572,7 +573,10 @@ __LIBARRAY_PRIVATE int ArrayListSet(ArrayList *plist,uint32_t pos,...)
   for (int i = 0; i < pos; i++) {
     ptr = ptr->nextptr;
   }
+  if (type!=ARRAY_TYPE_POINTER)
+  {
   free(ptr->data);
+  }
   ptr->data = NULL;
   va_list list;
   va_start(list, pos);
