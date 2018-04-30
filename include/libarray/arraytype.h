@@ -16,4 +16,5 @@
 #define ARRAY_TYPE_DOUBLE 0x0c
 #define ARRAY_TYPE_FLOAT 0x0d
 #define ARRAY_TYPE_POINTER 0x0e
+#define ARRAY_TYPE_BOOL 0x0f
 #endif /* ARRAYTYPE_H_ */

@@ -20,6 +20,7 @@ struct ArrayList {
  void (*destroy)(ArrayList *plist);
 };
 ArrayList *CreateArrayList(uint8_t type);
+ArrayList *ArrayListCreate(uint8_t type);
 #ifdef __cplusplus
 }
 #endif

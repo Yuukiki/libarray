@@ -1,6 +1,8 @@
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <libarray/array.h>
+#include <sys/cdefs.h>
 
 #define __LIBARRAY_PUBLIC __attribute__ ((visibility ("default")))
 #ifdef LIBARRAY_STATIC
@@ -134,6 +136,13 @@ __LIBARRAY_PRIVATE int ArrayListDataStore(uint8_t type, Node *pnode ,va_list lis
           pnode->data = data;
           break;
         }
+	case ARRAY_TYPE_BOOL: {
+	  bool data = (bool)va_arg(list, int);
+	  bool *bptr = malloc(sizeof(bool));
+	  *bptr = data;
+	  pnode->data = bptr;
+	  break;
+	}
         default:
           return -1;
         }
@@ -150,7 +159,7 @@ __LIBARRAY_PRIVATE int ArrayListCheck(ArrayList *plist)
     return -1;
   }
   uint8_t type = pinfo->type_id;
-  if (type < ARRAY_TYPE_SIGNED_INT || type > ARRAY_TYPE_POINTER) {
+  if (type < ARRAY_TYPE_SIGNED_INT || type > ARRAY_TYPE_BOOL) {
     return -1;
   }
   if (plist->add == NULL || plist->get == NULL || plist->length==NULL || plist->type==NULL) {
@@ -164,7 +173,7 @@ __LIBARRAY_PRIVATE int ArrayListCheck(ArrayList *plist)
 
 __LIBARRAY_PUBLIC ArrayList *CreateArrayList(uint8_t type)
 {
-  if (type <= 0x00 || type > 0x0e) {
+  if (type <= 0x00 || type > 0x0f) {
     return NULL;
   }
   ArrayList *plist = malloc(sizeof(ArrayList));
@@ -190,6 +199,9 @@ __LIBARRAY_PUBLIC ArrayList *CreateArrayList(uint8_t type)
   plist->destroy = ArrayListDestroy;
   return plist;
 }
+
+asm(".global ArrayListCreate; ArrayListCreate = CreateArrayList");
+
 __LIBARRAY_PRIVATE int ArrayListAddInternal(ArrayList *plist,va_list list)
 {
   int r=ArrayListCheck(plist);
@@ -369,6 +381,15 @@ __LIBARRAY_PRIVATE int ArrayListGet(ArrayList *plist,uint32_t pos,...)
           }
           *vptr = ptr->data;
           break;
+        }
+	case ARRAY_TYPE_BOOL: {
+	  bool *bptr = va_arg(list, bool *);
+	  if (bptr == NULL) {
+	     va_end(list);
+	     return -1;
+	  }
+	  *bptr = *((bool *)ptr->data);
+	  break;
         }
         default: {
           va_end(list);
