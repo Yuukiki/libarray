@@ -22,5 +22,6 @@ int main(void) {
 		list->add(list, true);
 	}
 	printf_bool(list);
+	list->destroy(list);
 	return 0;
 }
