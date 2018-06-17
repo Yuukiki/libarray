@@ -1,8 +1,8 @@
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <libarray/array.h>
 
-#define bool _Bool
 #define asm __asm__
 
 #define __LIBARRAY_PUBLIC __attribute__ ((visibility ("default")))
