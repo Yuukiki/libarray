@@ -2,7 +2,7 @@
 An easy universal container wirtten in C.
 
 ## Requirement
-A standard C compiler with C99 support.
+A standard C compiler with C99 and inline assembly support.
 
 ## Build
 
