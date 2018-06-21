@@ -3,7 +3,7 @@
 
 static inline void printf_list(ArrayList *list)
 {
-  for (int i = 0; i < list->length(list); i++) {
+  for (uint32_t i = 0; i < list->length(list); i++) {
     int num;
     list->get(list, i,&num); // Get value from list by index
     printf("the number in %d:%d\n", i, num);

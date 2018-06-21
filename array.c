@@ -516,7 +516,7 @@ __LIBARRAY_PRIVATE int ArrayListInsert(ArrayList *plist, uint32_t pos, ...)
     }
     va_end(list);
     Node *ptr = plist->head;
-    for (int i = 1; i < pos; i++) {
+    for (uint32_t i = 1; i < pos; i++) {
       ptr = ptr->nextptr;
     }
     pnode->nextptr = ptr->nextptr;
@@ -559,7 +559,7 @@ __LIBARRAY_PRIVATE int ArrayListRemove(ArrayList *plist,uint32_t pos)
   }
   if (pos == len - 1) {
     Node *ptr = plist->head;
-    for (int i = 1; i < pos; i++) {
+    for (uint32_t i = 1; i < pos; i++) {
       ptr = ptr->nextptr;
     }
     ArrayListFree(ptr->nextptr, ArrayListGetType(plist));
@@ -570,7 +570,7 @@ __LIBARRAY_PRIVATE int ArrayListRemove(ArrayList *plist,uint32_t pos)
   else
   {
         Node *ptr = plist->head;
-        for (int i = 1; i < pos; i++) {
+        for (uint32_t i = 1; i < pos; i++) {
           ptr = ptr->nextptr;
         }
         Node *nptr = ptr->nextptr;
@@ -592,7 +592,7 @@ __LIBARRAY_PRIVATE int ArrayListSet(ArrayList *plist,uint32_t pos,...)
     return -1;
   }
   Node *ptr=plist->head;
-  for (int i = 0; i < pos; i++) {
+  for (uint32_t i = 0; i < pos; i++) {
     ptr = ptr->nextptr;
   }
   if (type!=ARRAY_TYPE_POINTER)
