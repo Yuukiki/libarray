@@ -13,10 +13,10 @@ dynamic-lib:
 	$(CC) -std=c99 -shared -fPIC -o $(LIBNAME).so $(SRC) -Iinclude -Werror -Wextra
 
 test: static-lib
-	$(CC) -o test main.c -Iinclude -L. -larray -g -Werror -Wextra
+	$(CC) -o test main.c -Iinclude -L. -larray -g -Werror -Wextra -Wl,--rpath,$(PWD)
 
 booltest: static-lib
-	$(CC) -o booltest booltest.c -Iinclude -L. -larray -g -Werror -Wextra
+	$(CC) -o booltest booltest.c -Iinclude -L. -larray -g -Werror -Wextra -Wl,--rpath,$(PWD)
 
 .PHONY: clean
 
