@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "libarray/array.h"
+#include <libarray/arraylog.h>
 
 static inline void printf_list(ArrayList *list)
 {
   for (uint32_t i = 0; i < list->length(list); i++) {
     int num;
     list->get(list, i,&num); // Get value from list by index
-    printf("the number in %d:%d\n", i, num);
+    LOGD("the number in %d:%d\n", i, num);
   }
 }
 int main(void) {
@@ -14,7 +15,7 @@ int main(void) {
   for (int i = 0; i < 10; i++) {
     list->add(list, i); // Add value to list by index
   }
-  printf("length:%d\n", list->length(list)); // Print length
+  LOGD("length:%d\n", list->length(list)); // Print length
   printf_list(list); // Print the whole list
   list->destroy(list); // Dedtroy list
   return 0;
