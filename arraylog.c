@@ -1,13 +1,13 @@
 #include <libarray/arraylog.h>
 
-const char *LOG_TEXT[] = {
+const static char *LOG_TEXT[] = {
 	"\033[;37mDEBUG: ",
 	"\033[;36mINFO: ",
 	"\033[;33mWARN: ",
 	"\033[;31mERROR: "
 };
 
-const char* LOG_TEXT_END = "\033[0m";
+const static char* LOG_TEXT_END = "\033[0m";
 
 void __array_log_print(enum LOG_LEVEL level, const char* str, ...)
 {
