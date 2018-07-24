@@ -5,11 +5,7 @@
 #define asm __asm__
 
 #define __LIBARRAY_PUBLIC __attribute__ ((visibility ("default")))
-#ifdef LIBARRAY_STATIC
 #define __LIBARRAY_PRIVATE static
-#else
-#define __LIBARRAY_PRIVATE __attribute__ ((visibility ("hidden")))
-#endif
 
 typedef struct Node Node;
 typedef struct ArrayInfo ArrayInfo;

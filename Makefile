@@ -1,16 +1,19 @@
 LIBNAME=libarray
-SRC=array.c
-OBJ=array.o
+SRCS += array.c
+SRCS += arraylog.c
+OBJS = $(SRCS:.c=.o)
+SOBJS = $(OBJS)
+CFLAGS += -std=c99 -g -Werror -Wextra
+CFLAGS += -Iinclude -fPIC
 
 all: static-lib dynamic-lib
 
-static-lib:
-	$(CC) -std=c99 -c $(SRC) -o $(OBJ) -DLIBARRAY_STATIC -Iinclude -g -Werror -Wextra
-	@ar -rcu $(LIBNAME).a $(OBJ)
+static-lib: $(OBJS)
+	@ar -rcu $(LIBNAME).a $(OBJS)
 	@ranlib $(LIBNAME).a
 
-dynamic-lib:
-	$(CC) -std=c99 -shared -fPIC -o $(LIBNAME).so $(SRC) -Iinclude -Werror -Wextra
+dynamic-lib: $(OBJS)
+	$(CC) -shared -fPIC -o $(LIBNAME).so $(OBJS)
 
 test: static-lib
 	$(CC) -o test main.c -Iinclude -L. -larray -g -Werror -Wextra -Wl,--rpath,$(PWD)
@@ -21,4 +24,4 @@ booltest: static-lib
 .PHONY: clean
 
 clean:
-	@rm -f $(OBJ) $(LIBNAME).a $(LIBNAME).so test booltest
+	@rm -f $(OBJS) $(LIBNAME).a $(LIBNAME).so test booltest
