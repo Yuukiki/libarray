@@ -3,6 +3,7 @@ SRCS += array.c
 SRCS += arraylog.c
 OBJS = $(SRCS:.c=.o)
 SOBJS = $(OBJS)
+CC ?= gcc
 CFLAGS += -std=c99 -g -Werror -Wextra
 CFLAGS += -Iinclude -fPIC -Wall -Werror -Wextra
 
