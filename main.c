@@ -7,7 +7,7 @@ static inline void printf_list(ArrayList *list)
   for (uint32_t i = 0; i < list->length(list); i++) {
     int num;
     list->get(list, i,&num); // Get value from list by index
-    LOGE("the number in %d:%d\n", i, num);
+    LOGD("the number in %d:%d\n", i, num);
   }
 }
 int main(void) {
