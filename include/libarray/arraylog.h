@@ -6,6 +6,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#define LOG_BUFFER_SIZE 1024
+
 #define LOGE(fmt, arg...) \
 	__array_log_print(LOG_LEVEL_ERROR, fmt, ##arg)
 
