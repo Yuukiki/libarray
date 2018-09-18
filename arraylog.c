@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <libarray/arraylog.h>
 
 static const char *LOG_TEXT[] = {
@@ -22,6 +23,6 @@ void __array_log_print(enum LOG_LEVEL level, const char* str, ...)
 	strncpy(logstr, LOG_TEXT[level], logstr_size);
 	strncat(logstr, buffer, logstr_size);
 	strncat(logstr, LOG_TEXT_END, logstr_size);
-	printf("%s", logstr);
+	write(1, logstr, logstr_size);
 	free(logstr);
 }
