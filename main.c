@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "libarray/array.h"
+#include <libarray/array.h>
 #include <libarray/arraylog.h>
 
 static inline void printf_list(ArrayList *list)

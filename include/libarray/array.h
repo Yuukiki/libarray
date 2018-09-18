@@ -1,5 +1,6 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
+#define REALLY_INCLUDE_ARRAYTYPE_H_
 #include "arraytype.h"
 #ifdef __cplusplus
 extern "C" {
