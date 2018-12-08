@@ -449,6 +449,8 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList *plist)
       ptr = ptr->nextptr;
       free(nptr);
     }
+    free(plist->info);
+    plist->info = NULL;
     ArrayListFunctionClear(plist);
     free(plist);
   }

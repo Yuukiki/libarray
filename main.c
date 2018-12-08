@@ -17,6 +17,6 @@ int main(void) {
   }
   LOGD("length:%d\n", list->length(list)); // Print length
   printf_list(list); // Print the whole list
-  list->destroy(list); // Dedtroy list
+  list->destroy(list); // Destroy list
   return 0;
 }
