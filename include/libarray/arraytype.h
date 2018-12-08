@@ -1,6 +1,6 @@
 #ifndef ARRAYTYPE_H_
 #ifndef REALLY_INCLUDE_ARRAYTYPE_H_
-#error Don't directly include arraytype header!
+#error "Don't directly include arraytype header!"
 #endif /* REALLY_INCLUDE_ARRAYTYPE_H_ */
 #include <stdint.h>
 #include <stdarg.h>
