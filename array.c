@@ -1,10 +1,13 @@
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include <stdbool.h>
 #include <libarray/array.h>
 
+#ifndef _WIN32
 #define asm __asm__
-
 #define __LIBARRAY_PUBLIC __attribute__ ((visibility ("default")))
+#else
+#define __LIBARRAY_PUBLIC
+#endif // _WIN32
 #define __LIBARRAY_PRIVATE static
 
 typedef struct Node Node;
@@ -28,7 +31,7 @@ __LIBARRAY_PRIVATE int ArrayListGet(ArrayList *plist, uint32_t pos, ...);
 __LIBARRAY_PRIVATE uint32_t ArrayListGetLength(ArrayList *plist);
 __LIBARRAY_PRIVATE uint8_t ArrayListGetType(ArrayList *plist);
 __LIBARRAY_PRIVATE int ArrayListRemove(ArrayList *plist, uint32_t pos);
-__LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList *plist);
+__LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList **plist);
 static inline void ArrayListFunctionClear(ArrayList *plist);
 static inline void ArrayListFree(Node *pnode, uint8_t type);
 
@@ -196,7 +199,9 @@ __LIBARRAY_PUBLIC ArrayList *CreateArrayList(uint8_t type)
   return plist;
 }
 
+#ifdef __GNUC__
 asm(".global ArrayListCreate; ArrayListCreate = CreateArrayList");
+#endif // __GUNC__
 
 __LIBARRAY_PRIVATE int ArrayListAddInternal(ArrayList *plist,va_list list)
 {
@@ -412,18 +417,20 @@ __LIBARRAY_PRIVATE uint8_t ArrayListGetType(ArrayList *plist)
   return plist->info->type_id;
 }
 
-__LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList *plist)
+__LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList **plist)
 {
-  if (ArrayListCheck(plist) < 0) {
+  if (!plist)
+    return;
+  if (ArrayListCheck(*plist) < 0) {
     return;
   }
-  uint8_t type = ArrayListGetType(plist);
+  uint8_t type = ArrayListGetType(*plist);
   if (type == 0) {
     return;
   }
   if (type==ARRAY_TYPE_POINTER)
   {
-    Node *ptr = plist->head;
+    Node *ptr = (*plist)->head;
     Node *nptr = NULL;
     while (ptr!=NULL) {
       nptr = ptr;
@@ -431,14 +438,14 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList *plist)
       ptr = ptr->nextptr;
       free(nptr);
     }
-    free(plist->info);
-    plist->info = NULL;
-    ArrayListFunctionClear(plist);
-    free(plist);
+    free((*plist)->info);
+    (*plist)->info = NULL;
+    ArrayListFunctionClear(*plist);
+    free(*plist);
   }
   else
   {
-    Node *ptr = plist->head;
+    Node *ptr = (*plist)->head;
     void *dataptr = NULL;
     Node *nptr = NULL;
     while (ptr != NULL) {
@@ -449,11 +456,12 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList *plist)
       ptr = ptr->nextptr;
       free(nptr);
     }
-    free(plist->info);
-    plist->info = NULL;
-    ArrayListFunctionClear(plist);
-    free(plist);
+    free((*plist)->info);
+    (*plist)->info = NULL;
+    ArrayListFunctionClear(*plist);
+    free(*plist);
   }
+  *plist = NULL;
 }
 
 static inline void ArrayListFunctionClear(ArrayList *plist) {

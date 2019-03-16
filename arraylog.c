@@ -1,4 +1,8 @@
+﻿#ifndef _WIN32
 #include <unistd.h>
+#else
+#include <stdio.h>
+#endif // _WIN32
 #include <libarray/arraylog.h>
 
 static const char *LOG_TEXT[] = {
@@ -23,6 +27,11 @@ void __array_log_print(enum LOG_LEVEL level, const char* str, ...)
 	strncpy(logstr, LOG_TEXT[level], logstr_size);
 	strncat(logstr, buffer, logstr_size);
 	strncat(logstr, LOG_TEXT_END, logstr_size);
+#ifndef _WIN32
 	write(1, logstr, logstr_size);
+#else
+    fwrite(logstr, logstr_size, 1, stdout);
+    fflush(stdout);
+#endif // _WIN32
 	free(logstr);
 }

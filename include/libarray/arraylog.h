@@ -1,4 +1,4 @@
-#ifndef ARRAYLOG_H_
+﻿#ifndef ARRAYLOG_H_
 #define ARRAYLOG_H_
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,17 +8,17 @@
 
 #define LOG_BUFFER_SIZE 1024
 
-#define LOGE(fmt, arg...) \
-	__array_log_print(LOG_LEVEL_ERROR, fmt, ##arg)
+#define LOGE(fmt, ...) \
+	__array_log_print(LOG_LEVEL_ERROR, fmt, __VA_ARGS__)
 
-#define LOGW(fmt, arg...) \
-	__array_log_print(LOG_LEVEL_WARN, fmt, ##arg)
+#define LOGW(fmt, ...) \
+	__array_log_print(LOG_LEVEL_WARN, fmt, __VA_ARGS__)
 
-#define LOGI(fmt, arg...) \
-	__array_log_print(LOG_LEVEL_INFO, fmt, ##arg)
+#define LOGI(fmt, ...) \
+	__array_log_print(LOG_LEVEL_INFO, fmt, __VA_ARGS__)
 
-#define LOGD(fmt, arg...) \
-	__array_log_print(LOG_LEVEL_DEBUG, fmt, ##arg)
+#define LOGD(fmt, ...) \
+	__array_log_print(LOG_LEVEL_DEBUG, fmt, __VA_ARGS__)
 
 enum LOG_LEVEL {
 	LOG_LEVEL_DEBUG = 0,

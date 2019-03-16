@@ -51,6 +51,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Visual Studio
+Debug/
+Release/
+x64/
+.vs/
+
 # Test
 test
 booltest
