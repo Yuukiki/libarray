@@ -201,7 +201,7 @@ __LIBARRAY_PUBLIC ArrayList *CreateArrayList(uint8_t type)
 
 #ifdef __GNUC__
 asm(".global ArrayListCreate; ArrayListCreate = CreateArrayList");
-#endif // __GUNC__
+#endif // __GNUC__
 
 __LIBARRAY_PRIVATE int ArrayListAddInternal(ArrayList *plist,va_list list)
 {
@@ -421,16 +421,17 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList **plist)
 {
   if (!plist)
     return;
-  if (ArrayListCheck(*plist) < 0) {
+  ArrayList *list = *plist;
+  if (ArrayListCheck(list) < 0) {
     return;
   }
-  uint8_t type = ArrayListGetType(*plist);
+  uint8_t type = ArrayListGetType(list);
   if (type == 0) {
     return;
   }
   if (type==ARRAY_TYPE_POINTER)
   {
-    Node *ptr = (*plist)->head;
+    Node *ptr = list->head;
     Node *nptr = NULL;
     while (ptr!=NULL) {
       nptr = ptr;
@@ -438,14 +439,14 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList **plist)
       ptr = ptr->nextptr;
       free(nptr);
     }
-    free((*plist)->info);
-    (*plist)->info = NULL;
-    ArrayListFunctionClear(*plist);
-    free(*plist);
+    free(list->info);
+    list->info = NULL;
+    ArrayListFunctionClear(list);
+    free(list);
   }
   else
   {
-    Node *ptr = (*plist)->head;
+    Node *ptr = list->head;
     void *dataptr = NULL;
     Node *nptr = NULL;
     while (ptr != NULL) {
@@ -456,10 +457,10 @@ __LIBARRAY_PRIVATE void ArrayListDestroy(ArrayList **plist)
       ptr = ptr->nextptr;
       free(nptr);
     }
-    free((*plist)->info);
-    (*plist)->info = NULL;
-    ArrayListFunctionClear(*plist);
-    free(*plist);
+    free(list->info);
+    list->info = NULL;
+    ArrayListFunctionClear(list);
+    free(list);
   }
   *plist = NULL;
 }

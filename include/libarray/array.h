@@ -21,9 +21,9 @@ struct ArrayList {
  void (*destroy)(ArrayList **plist);
 };
 ArrayList *CreateArrayList(uint8_t type);
-#ifndef _WIN32
+#ifndef __GNUC__
 ArrayList *ArrayListCreate(uint8_t type);
-#endif // _WIN32
+#endif // __GNUC__
 #ifdef __cplusplus
 }
 #endif
