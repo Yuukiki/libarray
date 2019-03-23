@@ -26,8 +26,10 @@ struct ArrayInfo {
 __LIBARRAY_PRIVATE int ArrayListAdd(ArrayList *plist, ...);
 __LIBARRAY_PRIVATE int ArrayListAddInternal(ArrayList *plist, va_list list);
 __LIBARRAY_PRIVATE int ArrayListInsert(ArrayList *plist, uint32_t pos, ...);
+__LIBARRAY_PRIVATE size_t ArrayListSearch(ArrayList *plist, void *data, void *func);
 __LIBARRAY_PRIVATE int ArrayListSet(ArrayList *plist, uint32_t pos, ...);
 __LIBARRAY_PRIVATE int ArrayListGet(ArrayList *plist, uint32_t pos, ...);
+__LIBARRAY_PRIVATE void ArrayListForeach(ArrayList *plist, void *func);
 __LIBARRAY_PRIVATE uint32_t ArrayListGetLength(ArrayList *plist);
 __LIBARRAY_PRIVATE uint8_t ArrayListGetType(ArrayList *plist);
 __LIBARRAY_PRIVATE int ArrayListRemove(ArrayList *plist, uint32_t pos);
@@ -164,6 +166,9 @@ __LIBARRAY_PRIVATE int ArrayListCheck(ArrayList *plist)
   if (plist->add == NULL || plist->get == NULL || plist->length==NULL || plist->type==NULL) {
     return -1;
   }
+  if (plist->search == NULL || plist->foreach == NULL) {
+    return -1;
+  }
   if (plist->destroy == NULL||plist->insert==NULL||plist->remove==NULL||plist->set==NULL) {
     return -1;
   }
@@ -190,8 +195,10 @@ __LIBARRAY_PUBLIC ArrayList *CreateArrayList(uint8_t type)
   plist->info = pinfo;
   plist->add = ArrayListAdd;
   plist->insert = ArrayListInsert;
+  plist->search = ArrayListSearch;
   plist->set = ArrayListSet;
   plist->get = ArrayListGet;
+  plist->foreach = ArrayListForeach;
   plist->length = ArrayListGetLength;
   plist->type = ArrayListGetType;
   plist->remove = ArrayListRemove;
@@ -235,6 +242,21 @@ __LIBARRAY_PRIVATE int ArrayListAddInternal(ArrayList *plist,va_list list)
   }
   pinfo->length += 1;
   return 0;
+}
+
+__LIBARRAY_PRIVATE size_t ArrayListSearch(ArrayList *plist, void *data, void *func)
+{
+    if (ArrayListCheck(plist) || !data || !func)
+        return -1;
+    bool (*func_f) (void *data_a, void *data_b) = (bool (*) (void *, void *)) func;
+    for (size_t i = 0; i < ArrayListGetLength(plist); i++)
+    {
+        void *cdata = NULL;
+        ArrayListGet(plist, i, &cdata);
+        if (func_f(data, cdata))
+            return i;
+    }
+    return -1;
 }
 
 __LIBARRAY_PRIVATE int ArrayListGet(ArrayList *plist,uint32_t pos,...)
@@ -399,6 +421,19 @@ __LIBARRAY_PRIVATE int ArrayListGet(ArrayList *plist,uint32_t pos,...)
         }
         va_end(list);
         return 0;
+}
+
+__LIBARRAY_PRIVATE void ArrayListForeach(ArrayList *plist, void *func)
+{
+    if (ArrayListCheck(plist) || !func)
+        return;
+    void (*func_f) (void *data) = (void (*) (void *data)) func;
+    for (size_t i = 0; i < plist->length(plist); i++)
+    {
+        void *data = NULL;
+        ArrayListGet(plist, i, &data);
+        func_f(data);
+    }
 }
 
 __LIBARRAY_PRIVATE uint32_t ArrayListGetLength(ArrayList *plist)
